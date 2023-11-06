@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '../../components/Input';
 import back from '../../services/back';
 import BuildsList from '../../components/BuildsList';
@@ -21,26 +21,28 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <Styled.Wrapper>
+    <>
       {loading ? (
-        <></>
+        <h1 style={{fontSize: '5rem', color: 'white'}}>Loading</h1>
       ) : (
-        <>
+        <Styled.Wrapper>
           <h1>
             {builds?.length >= 1 && selectedClass !== '' ? (
               <BuildsList buildsList={builds} selectedClass={selectedClass} />
             ) : (
-              <Input
-                classes={classes}
-                setBuilds={setBuilds}
-                setSelectedClass={setSelectedClass}
-                setLoading={setLoading}
-              />
+              <>
+                <Input
+                  classes={classes}
+                  setBuilds={setBuilds}
+                  setSelectedClass={setSelectedClass}
+                  setLoading={setLoading}
+                />
+              </>
             )}
           </h1>
-        </>
+        </Styled.Wrapper>
       )}
-    </Styled.Wrapper>
+    </>
   );
 };
 

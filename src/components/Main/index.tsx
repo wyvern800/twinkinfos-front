@@ -1,4 +1,4 @@
-import { useEffect, ReactElement } from 'react';
+import React, { useEffect, ReactElement } from 'react';
 
 import { useHistory } from 'react-router-dom';
 import { useUserData } from '../../contexts/UserData';

@@ -1,14 +1,17 @@
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Form, Login, FormFieldContainer } from './styles';
+import { Form } from './styles';
 
 import FormField from '../FormField';
 
 import auth from '../../services/auth';
+
+import { Button } from '@mui/material';
 
 const FormRegister = (): any => {
   const history = useHistory();
@@ -25,10 +28,12 @@ const FormRegister = (): any => {
     password: yup
       .string()
       .required('Please enter your password.')
-      .max(15, 'Sua senha só pode ter no máximo 32 caracteres!'),
+      .max(15, "Your password can't have more than 12 characters")
+      .oneOf([yup.ref('passwordConfirmation'), null], 'Passwords must match'),
     passwordConfirmation: yup
       .string()
-      .max(15, 'Sua senha só pode ter no máximo 32 caracteres!')
+      .required('Please enter your password confirmation')
+      .max(15, "Your password can't have more than 12 characters")
       .oneOf([yup.ref('password'), null], 'Passwords must match'),
   });
 
@@ -74,29 +79,31 @@ const FormRegister = (): any => {
         setValueFormState={setValue}
         width="100%"
       />
-      <FormFieldContainer>
-        <FormField
-          name="password"
-          type="password"
-          label="Password"
-          register={register}
-          error={errors.password?.message}
-          setValueFormState={setValue}
-          width="100%"
-        />
-        <FormField
-          name="passwordConfirmation"
-          type="password"
-          label="Confirm Password"
-          register={register}
-          error={errors.passwordConfirmation?.message}
-          setValueFormState={setValue}
-          width="100%"
-          margin_left="20px"
-        />
-      </FormFieldContainer>
+
+      <FormField
+        name="password"
+        type="password"
+        label="Password"
+        register={register}
+        error={errors.password?.message}
+        setValueFormState={setValue}
+        width="100%"
+      />
+      <FormField
+        name="passwordConfirmation"
+        type="password"
+        label="Confirm Password"
+        register={register}
+        error={errors.passwordConfirmation?.message}
+        setValueFormState={setValue}
+        width="100%"
+      />
+
       <Link to="/login">Already registered? click to login</Link>
-      <Login type="submit">Register</Login>
+
+      <Button variant="outlined" type="submit">
+        Register
+      </Button>
     </Form>
   );
 };

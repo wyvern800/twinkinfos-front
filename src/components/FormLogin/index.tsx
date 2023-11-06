@@ -1,3 +1,4 @@
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import * as yup from 'yup';
@@ -12,6 +13,8 @@ import FormField from '../FormField';
 import auth from '../../services/auth';
 
 import { useUserData } from '../../contexts/UserData';
+
+import { Button } from '@mui/material';
 
 const FormLogin = (): any => {
   const history = useHistory();
@@ -30,11 +33,11 @@ const FormLogin = (): any => {
   }, []);
 
   const validationSchema = yup.object().shape({
-    username: yup.string().required('E-mail/login inválido'),
+    username: yup.string().required('Invalid username'),
     password: yup
       .string()
-      .max(32, 'Sua senha só pode ter no máximo 32 caracteres!')
-      .required(),
+      .max(15, 'Your password can only have 15 characters max.!')
+      .required('Invalid password'),
   });
 
   const {
@@ -72,6 +75,7 @@ const FormLogin = (): any => {
         error={errors.username?.message}
         setValueFormState={setValue}
         width="100%"
+        marginBottom="15px"
       />
       <FormField
         name="password"
@@ -81,10 +85,9 @@ const FormLogin = (): any => {
         error={errors.password?.message}
         setValueFormState={setValue}
         width="100%"
-        marginBottom="15px"
       />
       <Link to="/register">Not registered yet? click to register</Link>
-      <Login type="submit">Login</Login>
+      <Button variant="outlined" type="submit">Login</Button>
     </Form>
   );
 };

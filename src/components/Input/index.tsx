@@ -1,5 +1,5 @@
+import React, { SetStateAction, Dispatch } from 'react';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
-import { SetStateAction, Dispatch } from 'react';
 import { toast } from 'react-toastify';
 import * as Styled from './styles';
 import back from '../../services/back';
@@ -64,6 +64,10 @@ const Input = ({
           styling={{
             searchIconMargin: '10px 12px 0 11px',
             clearIconMargin: '3px 8px 0 0',
+            backgroundColor: '#36384A',
+            color: 'white',
+            border: '0',
+            hoverBackgroundColor: '#36384A',
           }}
           showIcon={false}
           showNoResults

@@ -2,9 +2,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/jsx-props-no-spreading */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Wrapper, LabelInput, Input, ErrorMessage } from './styles';
+
+import { TextField } from '@mui/material';
 
 const FormField = ({
   type = 'text',
@@ -33,14 +35,16 @@ const FormField = ({
 
   return (
     <Wrapper width={width} marginLeft={marginLeft} marginBottom={marginBottom}>
-      <LabelInput>{label ?? ''}:</LabelInput>
-      <Input
+      <TextField
         type={type}
+        id="outlined-controlled"
+        label={label}
         {...register(name)}
         value={value}
         onChange={onChange}
+        helperText={error ?? ''}
+        error={error ?? ''}
       />
-      <ErrorMessage>{error ?? ''}</ErrorMessage>
     </Wrapper>
   );
 };

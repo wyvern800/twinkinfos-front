@@ -27,30 +27,22 @@ export default createGlobalStyle`
     -ms-user-select: text !important;
     user-select: text !important;
   }
-
-  pre, code {
-    border-radius: 8px;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-  }
-
-  a {
-      text-decoration: none;
-  }
 }
 
-  body, html {
+  body {
     background-color: rgba(26,27,31);
     background-color:  #08070d;
-    margin: 0;
-    height:100%;
+    padding: 0;
+    box-sizing: border-box;
 
-    max-width: 100%;
+    margin: 0 auto;
+
+    height: 100vh;
+    width: 100vw;
+
     overflow-x: hidden;
+    overflow-y: auto;
 
-    // Make whole website centralized
     display: flex;
     justify-content: center;
     align-items: center;

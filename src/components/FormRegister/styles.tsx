@@ -37,7 +37,6 @@ export const FormFieldContainer = styled.div`
   padding-bottom: 5px;
   gap: 15px;
   width: 100%;
-  margin-bottom: 15px;
 
   @media (max-width: 600px) {
     flex-direction: column;
