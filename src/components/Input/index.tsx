@@ -17,7 +17,7 @@ const Input = ({
   setBuilds,
   setLoaded,
   setSearching,
-  loaded
+  loaded,
 }: InputProps): any => {
   const handleOnSelect = async (className: any) => {
     setSearching(true);
@@ -32,7 +32,7 @@ const Input = ({
       setBuilds(res.data);
       setSearching(false);
       setLoaded(true);
-    })
+    });
   };
 
   const formatResult = (item: any) => {
@@ -52,7 +52,7 @@ const Input = ({
     );
   };
 
-  return !loaded ? (
+  return (
     <>
       <Styled.MainDiv>
         <h1>Which class does your twink have?</h1>
@@ -73,13 +73,12 @@ const Input = ({
             showIcon={false}
             showNoResults
             showNoResultsText="No builds were found."
-            className='customName'
+            className="customName"
+            placeholder="Search..."
           />
         </Styled.WrapperSearch>
       </Styled.MainDiv>
     </>
-  ) : (
-    <></>
   );
 };
 

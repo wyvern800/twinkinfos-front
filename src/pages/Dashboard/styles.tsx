@@ -14,10 +14,13 @@ export const Wrapper = styled.div`
   -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);
 
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 
   @media(max-width: 748px) {
     width: 100%;
     border-radius: 0;
-    margin-top: 0;
+    margin: 0;
+    height: 100%;
   }
 `;

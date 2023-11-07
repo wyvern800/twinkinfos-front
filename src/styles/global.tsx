@@ -55,9 +55,6 @@ export default createGlobalStyle`
 
     width: 100%;
 
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-
     display: flex;
     align-items: center;
     justify-content: center;
