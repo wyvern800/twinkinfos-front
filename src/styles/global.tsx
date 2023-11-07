@@ -51,12 +51,7 @@ export default createGlobalStyle`
     background-color:  #08070d;
 
     margin: 0;
-    padding: 0;
-
-    width: 100%;
-
-    margin-top: 2vh;
-    margin-bottom: 2vh;
+    padding: 0;;
 
     display: flex;
     align-items: center;

@@ -22,16 +22,18 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <Styled.Wrapper>
-      <Input
-        classes={classes}
-        setBuilds={setBuilds}
-        setLoaded={setLoaded}
-        setSearching={setSearching}
-        loaded={loaded}
-      />
-      <BuildsList buildsList={builds} searching={searching} loaded={loaded} />
-    </Styled.Wrapper>
+    <Styled.OuterWrapper>
+      <Styled.Wrapper>
+        <Input
+          classes={classes}
+          setBuilds={setBuilds}
+          setLoaded={setLoaded}
+          setSearching={setSearching}
+          loaded={loaded}
+        />
+        <BuildsList buildsList={builds} searching={searching} loaded={loaded} />
+      </Styled.Wrapper>
+    </Styled.OuterWrapper>
   );
 };
 
