@@ -69,6 +69,7 @@ const Input = ({
               color: 'white',
               border: '0',
               hoverBackgroundColor: '#36384A',
+              zIndex: 100
             }}
             showIcon={false}
             showNoResults

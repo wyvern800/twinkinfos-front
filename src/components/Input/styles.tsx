@@ -22,8 +22,4 @@ export const MainDiv = styled.form`
 export const WrapperSearch = styled.div`
   width: 100%;
   margin-top: 10px;
-
-  @media screen and (max-width: 1024px) {
-    width: 80%;
-  }
 `;
