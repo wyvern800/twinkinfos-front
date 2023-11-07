@@ -3,6 +3,7 @@ import Input from '../../components/Input';
 import back from '../../services/back';
 import BuildsList from '../../components/BuildsList';
 import * as Styled from './styles';
+import Header from '../../components/Header';
 
 const Dashboard: React.FC = () => {
   const [builds, setBuilds] = useState([]);
@@ -23,6 +24,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Styled.OuterWrapper>
+      <Header />
       <Styled.Wrapper>
         <Input
           classes={classes}

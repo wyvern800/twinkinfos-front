@@ -6,6 +6,7 @@ export const OuterWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  flex-direction: column;
 
   @media (max-width: 748px) {
     min-width: 100vw;
@@ -22,10 +23,16 @@ export const Wrapper = styled.div`
   -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.75);
 
+  margin-top: 5%;
+  margin-bottom: 5%;
+
   @media (max-width: 748px) {
     width: 100%;
     border-radius: 0;
     margin: 0;
-    height: 100%;
+
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
   }
 `;

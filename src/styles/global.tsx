@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import bg from '../assets/bg.jpg';
 
 export default createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto&display=swap');
@@ -47,14 +48,24 @@ export default createGlobalStyle`
 }
 
   body, html, #root {
-    background-color: rgba(26,27,31);
-    background-color:  #08070d;
+    background-color: transparent;
 
     margin: 0;
-    padding: 0;;
+    padding: 0;
 
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  html {
+    background-image: url('${bg}');
+    background-attachment: fixed;
+    background-size: cover;
+
+    @media (max-width: 768px) {
+      background: none;
+      background-color: #222431;
+    }
   }
 `;

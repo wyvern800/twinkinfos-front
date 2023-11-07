@@ -55,7 +55,6 @@ const Input = ({
   return (
     <>
       <Styled.MainDiv>
-        <h1>Which class does your twink have?</h1>
         <Styled.WrapperSearch>
           <ReactSearchAutocomplete
             items={classes}
@@ -75,7 +74,7 @@ const Input = ({
             showNoResults
             showNoResultsText="No builds were found."
             className="customName"
-            placeholder="Search..."
+            placeholder="Which class does your twink have?"
           />
         </Styled.WrapperSearch>
       </Styled.MainDiv>
