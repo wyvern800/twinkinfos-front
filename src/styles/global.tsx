@@ -27,24 +27,39 @@ export default createGlobalStyle`
     -ms-user-select: text !important;
     user-select: text !important;
   }
+
+  *::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: rgb(11, 14, 15);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgb(72, 74, 75);
+    border-radius: 8px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgb(54, 56, 58);
+  }
 }
 
-  body {
+  body, html, #root {
     background-color: rgba(26,27,31);
     background-color:  #08070d;
+
+    margin: 0;
     padding: 0;
-    box-sizing: border-box;
 
-    margin: 0 auto;
+    width: 100%;
 
-    height: 100vh;
-    width: 100vw;
-
-    overflow-x: hidden;
-    overflow-y: auto;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
 
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
   }
 `;

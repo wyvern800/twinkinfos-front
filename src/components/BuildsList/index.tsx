@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import * as Styled from './styles';
 import {
   Switch,
@@ -8,9 +8,18 @@ import {
   Divider,
   Chip,
   Avatar,
+  Skeleton,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { equipment } from '../../utils/constants';
+import { SwitchProps, Theme } from '@mui/material';
+import Alternatives from '../Alternatives';
+import { parseColor } from '../../utils/utils';
+interface MaterialUISwitchProps extends SwitchProps {
+  theme?: Theme;
+  value: boolean;
+  onChange: (event: any, checked: any) => void;
+}
 
 const Root = styled('div')(({ theme }) => ({
   width: '100%',
@@ -20,7 +29,11 @@ const Root = styled('div')(({ theme }) => ({
   },
 }));
 
-const MaterialUISwitch = styled(Switch)(({ theme }: any) => ({
+const MaterialUISwitch: any = styled(
+  ({ theme, value, onChange, ...props }: MaterialUISwitchProps) => (
+    <Switch checked={value} onChange={onChange} {...props} />
+  ),
+)(({ theme }: any) => ({
   width: 62,
   height: 34,
   padding: 7,
@@ -69,147 +82,192 @@ const MaterialUISwitch = styled(Switch)(({ theme }: any) => ({
 
 type BuildsListProps = {
   buildsList: any[];
-  selectedClass: any;
+  searching: any;
+  loaded: any;
 };
 
 export const BuildsList = ({
   buildsList,
-  selectedClass,
+  loaded,
+  searching,
 }: BuildsListProps): any => {
   const [isHorde, setIsHorde] = useState<boolean>(false);
 
-  const changeIsHorde = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean,
-  ) => {
+  const changeIsHorde = (e: any, checked: any) => {
     setIsHorde(checked);
   };
 
   useEffect(() => {
     console.log(isHorde);
-  }, [isHorde]);
+    console.log(loaded);
+    console.log(searching);
+  }, [isHorde, loaded, searching]);
+
+  /**
+   * Constructs all skeletons for the build
+   */
+
+  const getSkeletons: any = useMemo(() => {
+    const components = [];
+    for (let i = 0; i < 14; i++) {
+      components.push(
+        <div key={i}>
+          <Typography sx={{ marginTop: '20px', width: '100%' }}>
+            <Skeleton />
+          </Typography>
+
+          <Skeleton sx={{ marginBottom: 1 }}>
+            <Typography>Best in Slot:</Typography>
+          </Skeleton>
+
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Skeleton variant="circular">
+              <Avatar sx={{ width: 24, height: 24 }} />
+            </Skeleton>
+            <Skeleton sx={{ marginLeft: 1 }}>
+              <Typography>Best in Slot:</Typography>
+            </Skeleton>
+          </div>
+
+          <Skeleton sx={{ marginTop: 2 }}>
+            <Typography>Alternatives: (Click to Expand)</Typography>
+          </Skeleton>
+        </div>,
+      );
+    }
+    return components;
+  }, []);
 
   return (
     <Styled.Wrapper>
-      <FormGroup>
-        <Stack direction="row" spacing={1} alignItems="center">
-          {/*<Typography>Alliance</Typography>*/}
-          <MaterialUISwitch
-            value={isHorde}
-            onChange={(e, checked) => changeIsHorde(e, checked)}
-          />
-          {/*<Typography>Horde</Typography>*/}
-        </Stack>
-      </FormGroup>
-      {buildsList.length > 0 ? (
+      {loaded && !searching && (
         <>
-          <>{`${buildsList[0].className}'s Twink Builds`}</>
-          <Typography>
-            Race:{' '}
-            {isHorde ? buildsList[0]?.hordeRace : buildsList[0]?.allianceRace}
-          </Typography>
-          <Root>
-            {Object.entries(buildsList[0]).map(
-              ([buildObjectKey, buildObjectValue]: any, index) => {
-                if (equipment.includes(buildObjectKey)) {
-                  return (
-                    <div key={index}>
-                      <Divider textAlign="center">
-                        {buildObjectKey.toUpperCase()}
-                      </Divider>
-                      {isHorde ? (
-                        <a
-                          href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.hordeItem?.itemId}`}
-                          data-wowhead={`item=${buildObjectValue?.hordeItem?.itemId}`}
-                          target="_blank"
-                        >
-                          <Avatar
-                            alt={buildObjectValue?.hordeItem?.name}
-                            src={buildObjectValue?.hordeItem?.icon}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                          [{buildObjectValue?.hordeItem?.name}]
-                        </a>
-                      ) : (
-                        <a
-                          href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.allianceItem?.itemId}`}
-                          data-wowhead={`item=${buildObjectValue?.allianceItem?.itemId}`}
-                          target="_blank"
-                        >
-                          <Avatar
-                            alt={buildObjectValue?.allianceItem?.name}
-                            src={buildObjectValue?.allianceItem?.icon}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                          [{buildObjectValue?.allianceItem?.name}]
-                        </a>
-                      )}
-
-                      {buildObjectValue?.alternatives?.length && (
-                        <>
-                          <Typography>Alternatives: </Typography>
-
-                          {Object.entries(buildObjectValue?.alternatives)
-                            .filter(([altKey, altValue]: any) =>
-                              isHorde
-                                ? altValue?.hordeItem &&
-                                  altValue?.hordeItem?.isHorde
-                                : altValue?.allianceItem &&
-                                  !altValue?.allianceItem?.isHorde,
-                            )
-                            .map(([altKey, altValue]: any, index) => {
-                              if (altValue !== null && altKey !== undefined) {
-                                return (
-                                  <a
-                                    key={index}
-                                    href={`https://www.wowhead.com/wotlk/item=${
-                                      isHorde
-                                        ? altValue?.hordeItem?.itemId
-                                        : altValue?.allianceItem?.itemId
-                                    }`}
-                                    data-wowhead={`item=${
-                                      isHorde
-                                        ? altValue?.hordeItem?.itemId
-                                        : altValue?.allianceItem?.itemId
-                                    }`}
-                                    target="_blank"
-                                  >
-                                    <>
-                                      <Avatar
-                                        alt={
-                                          isHorde
-                                            ? altValue?.hordeItem?.name
-                                            : altValue?.allianceItem?.name
-                                        }
-                                        src={
-                                          isHorde
-                                            ? altValue?.hordeItem?.icon
-                                            : altValue?.allianceItem?.icon
-                                        }
-                                        sx={{ width: 24, height: 24 }}
-                                      />
-                                    </>
-                                    [
-                                    {isHorde
-                                      ? altValue?.hordeItem?.name
-                                      : altValue?.allianceItem?.name}
-                                    ]
-                                  </a>
-                                );
-                              }
-                            })}
-                        </>
-                      )}
-                    </div>
-                  );
-                }
-              },
-            )}
-          </Root>
+          <FormGroup>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <MaterialUISwitch
+                value={isHorde}
+                onChange={(e: any, checked: any) => changeIsHorde(e, checked)}
+              />
+            </Stack>
+          </FormGroup>
         </>
-      ) : (
-        <>No builds</>
       )}
+      {!loaded && searching && (
+        <Skeleton>
+          <Switch />
+        </Skeleton>
+      )}
+
+      {loaded && (
+        <>
+          <Typography
+            sx={{ marginTop: 2 }}
+          >{`${buildsList[0]?.className}'s Twink Builds`}</Typography>
+        </>
+      )}
+      {!loaded && searching && (
+        <Skeleton>
+          <Typography>Anyplayer's Twinks Builds</Typography>
+        </Skeleton>
+      )}
+
+      {loaded && (
+        <Typography sx={{ marginBottom: 2 }}>
+          Race:{' '}
+          {isHorde ? buildsList[0]?.hordeRace : buildsList[0]?.allianceRace}
+        </Typography>
+      )}
+      {!loaded && searching && (
+        <Skeleton>
+          <Typography>Race: Horde</Typography>
+        </Skeleton>
+      )}
+
+      {loaded && (
+        <Root>
+          {buildsList.length ? (
+            <>
+              {Object.entries(buildsList[0]).map(
+                ([buildObjectKey, buildObjectValue]: any, indexBuild) => {
+                  if (equipment.includes(buildObjectKey)) {
+                    return (
+                      <div key={indexBuild}>
+                        <Divider textAlign="center">
+                          <Chip
+                            label={buildObjectKey
+                              ?.replace('1', ' I')
+                              ?.replace('2', ' II')
+                              .toUpperCase()}
+                          />
+                        </Divider>
+                        <Typography sx={{ fontWeight: 'bold' }}>
+                          Best in Slot
+                        </Typography>
+                        {isHorde ? (
+                          <Styled.Tooltip
+                            href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.hordeItem?.itemId}`}
+                            data-wowhead={`item=${buildObjectValue?.hordeItem?.itemId}`}
+                            target="_blank"
+                          >
+                            <Avatar
+                              alt={buildObjectValue?.hordeItem?.name}
+                              src={buildObjectValue?.hordeItem?.icon}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                            <Typography
+                              sx={{
+                                color: parseColor(
+                                  buildObjectValue?.hordeItem?.itemLink,
+                                ),
+                                marginLeft: 1,
+                              }}
+                            >
+                              [{buildObjectValue?.hordeItem?.name}]
+                            </Typography>
+                          </Styled.Tooltip>
+                        ) : (
+                          <Styled.Tooltip
+                            href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.allianceItem?.itemId}`}
+                            data-wowhead={`item=${buildObjectValue?.allianceItem?.itemId}`}
+                            target="_blank"
+                          >
+                            <Avatar
+                              alt={buildObjectValue?.allianceItem?.name}
+                              src={buildObjectValue?.allianceItem?.icon}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                            <Typography
+                              sx={{
+                                color: parseColor(
+                                  buildObjectValue?.allianceItem?.itemLink,
+                                ),
+                                marginLeft: 1,
+                              }}
+                            >
+                              [{buildObjectValue?.allianceItem?.name}]
+                            </Typography>
+                          </Styled.Tooltip>
+                        )}
+
+                        <Alternatives
+                          buildObjectValue={buildObjectValue}
+                          isHorde={isHorde}
+                          searched={loaded}
+                          loaded={loaded}
+                          searching={searching}
+                        />
+                      </div>
+                    );
+                  }
+                },
+              )}
+            </>
+          ) : (
+            <>No builds</>
+          )}
+        </Root>
+      )}
+      {!loaded && searching && <>{getSkeletons}</>}
     </Styled.Wrapper>
   );
 };

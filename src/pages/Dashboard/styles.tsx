@@ -5,22 +5,19 @@ export const Wrapper = styled.div`
   border-radius: 15px;
   padding: 20px;
 
-  margin: 0;
 
-  // Disable select
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  width: 55vw;
 
-  width: 50vw;
+  margin: 50px auto;
 
-  position: absolute;
-  top: 0%;
-  left: 50%;
-  transform: translateX(-50%);
+  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);
+
 
   @media(max-width: 748px) {
     width: 100%;
     border-radius: 0;
+    margin-top: 0;
   }
 `;

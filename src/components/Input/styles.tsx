@@ -6,6 +6,17 @@ export const MainDiv = styled.form`
   justify-content: center;
   align-items: center;
   text-align: center;
+
+  .customName > div > div> ul > li {
+    cursor: pointer;
+    div > span:hover {
+      color: white;
+    }
+
+    &&:disabled {
+      pointer-events: none;
+    }
+  }
 `;
 
 export const WrapperSearch = styled.div`

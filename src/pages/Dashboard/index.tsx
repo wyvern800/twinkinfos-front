@@ -7,8 +7,9 @@ import * as Styled from './styles';
 const Dashboard: React.FC = () => {
   const [builds, setBuilds] = useState([]);
   const [classes, setClasses] = useState([]);
-  const [selectedClass, setSelectedClass] = useState('');
-  const [loading, setLoading] = useState(false);
+
+  const [loaded, setLoaded] = useState(false);
+  const [searching, setSearching] = useState(false);
 
   // get all classes
   useEffect(() => {
@@ -21,28 +22,16 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <>
-      {loading ? (
-        <h1 style={{fontSize: '5rem', color: 'white'}}>Loading</h1>
-      ) : (
-        <Styled.Wrapper>
-          <h1>
-            {builds?.length >= 1 && selectedClass !== '' ? (
-              <BuildsList buildsList={builds} selectedClass={selectedClass} />
-            ) : (
-              <>
-                <Input
-                  classes={classes}
-                  setBuilds={setBuilds}
-                  setSelectedClass={setSelectedClass}
-                  setLoading={setLoading}
-                />
-              </>
-            )}
-          </h1>
-        </Styled.Wrapper>
-      )}
-    </>
+    <Styled.Wrapper>
+      <Input
+        classes={classes}
+        setBuilds={setBuilds}
+        setLoaded={setLoaded}
+        setSearching={setSearching}
+        loaded={loaded}
+      />
+      <BuildsList buildsList={builds} searching={searching} loaded={loaded} />
+    </Styled.Wrapper>
   );
 };
 

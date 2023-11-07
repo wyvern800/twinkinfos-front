@@ -7,32 +7,32 @@ import back from '../../services/back';
 type InputProps = {
   classes: any[];
   setBuilds: Dispatch<SetStateAction<any>>;
-  setSelectedClass: Dispatch<SetStateAction<string>>;
-  setLoading: Dispatch<SetStateAction<boolean>>;
+  setLoaded: Dispatch<SetStateAction<boolean>>;
+  setSearching: Dispatch<SetStateAction<boolean>>;
+  loaded: any;
 };
 
 const Input = ({
   classes,
   setBuilds,
-  setSelectedClass,
-  setLoading,
+  setLoaded,
+  setSearching,
+  loaded
 }: InputProps): any => {
   const handleOnSelect = async (className: any) => {
-    setLoading(true);
-    await back
-      .getAllBuilds(className.name)
-      .then((res: any) => {
-        setBuilds(res.data);
-        setSelectedClass(className.name);
-
-        // If no builds are returned, then say
-        if (res.data.length === 0) {
-          toast.error('There are no builds for this class yet.');
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setSearching(true);
+    await back.getAllBuilds(className.name).then((res: any) => {
+      // If no builds are returned, then say
+      if (res.data.length === 0) {
+        toast.error('There are no builds for this class yet.');
+        setSearching(false);
+        setLoaded(false);
+        return;
+      }
+      setBuilds(res.data);
+      setSearching(false);
+      setLoaded(true);
+    })
   };
 
   const formatResult = (item: any) => {
@@ -52,29 +52,34 @@ const Input = ({
     );
   };
 
-  return (
-    <Styled.MainDiv>
-      <h1>Which class does your twink have?</h1>
-      <Styled.WrapperSearch>
-        <ReactSearchAutocomplete
-          items={classes}
-          onSelect={handleOnSelect}
-          autoFocus
-          formatResult={formatResult}
-          styling={{
-            searchIconMargin: '10px 12px 0 11px',
-            clearIconMargin: '3px 8px 0 0',
-            backgroundColor: '#36384A',
-            color: 'white',
-            border: '0',
-            hoverBackgroundColor: '#36384A',
-          }}
-          showIcon={false}
-          showNoResults
-          showNoResultsText="No builds were found."
-        />
-      </Styled.WrapperSearch>
-    </Styled.MainDiv>
+  return !loaded ? (
+    <>
+      <Styled.MainDiv>
+        <h1>Which class does your twink have?</h1>
+        <Styled.WrapperSearch>
+          <ReactSearchAutocomplete
+            items={classes}
+            onSelect={handleOnSelect}
+            autoFocus
+            formatResult={formatResult}
+            styling={{
+              searchIconMargin: '10px 12px 0 11px',
+              clearIconMargin: '3px 8px 0 0',
+              backgroundColor: '#36384A',
+              color: 'white',
+              border: '0',
+              hoverBackgroundColor: '#36384A',
+            }}
+            showIcon={false}
+            showNoResults
+            showNoResultsText="No builds were found."
+            className='customName'
+          />
+        </Styled.WrapperSearch>
+      </Styled.MainDiv>
+    </>
+  ) : (
+    <></>
   );
 };
 
