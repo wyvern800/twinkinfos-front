@@ -41,7 +41,6 @@ const FormRegister = (): any => {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
     setValue,
   } = useForm({ resolver: yupResolver(validationSchema) });
 

@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import UserDataProvider from './contexts/UserData';
 import Routes from './routes';

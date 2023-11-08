@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 
-import { Wrapper, LabelInput, Input, ErrorMessage } from './styles';
+import { Wrapper } from './styles';
 
 import { TextField } from '@mui/material';
 

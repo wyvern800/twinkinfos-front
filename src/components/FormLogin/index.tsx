@@ -6,20 +6,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
-import { Form, Login } from './styles';
+import { Form } from './styles';
 
 import FormField from '../FormField';
 
 import auth from '../../services/auth';
 
-import { useUserData } from '../../contexts/UserData';
-
 import { Button } from '@mui/material';
 
 const FormLogin = (): any => {
   const history = useHistory();
-
-  const { userData } = useUserData();
 
   // If user is already logged in, push him
   useEffect(() => {

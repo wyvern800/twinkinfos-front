@@ -6,7 +6,6 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Dashboard from './pages/Dashboard';
-import Repository from './pages/Repository';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Logout from './pages/Logout';

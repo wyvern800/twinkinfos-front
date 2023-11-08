@@ -1,6 +1,5 @@
 import React, { SetStateAction, Dispatch, useState } from 'react';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
-import { toast } from 'react-toastify';
 import * as Styled from './styles';
 import back from '../../services/back';
 

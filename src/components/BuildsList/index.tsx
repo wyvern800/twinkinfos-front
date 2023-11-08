@@ -293,6 +293,7 @@ export const BuildsList = ({
                       </div>
                     );
                   }
+                  return [buildObjectKey, buildObjectValue];
                 },
               )}
             </>

@@ -103,6 +103,7 @@ const Alternatives = ({
                           </Styled.Tooltip>
                         );
                       }
+                      return [altKey, altValue];
                     })}
                 </>
               )}
