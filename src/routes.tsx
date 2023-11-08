@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import Logout from './pages/Logout';
 
 import Main from './components/Main';
+import RepCalc from './pages/RepCalc';
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
   const isAuthenticate = localStorage.getItem('acessToken');
@@ -34,9 +35,10 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={Dashboard} />
-    <Route path="/repository" component={Repository} />
     <Route path="/login" component={Login} />
     <Route path="/register" component={Register} />
+    <Route path="/reputation-calc" component={RepCalc} />
+
     {/* Rotas privadas */}
     <PrivateRoute path="/profile" component={Main} />
     <PrivateRoute path="/admin" component={Main} />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Avatar, Skeleton } from '@mui/material';
+import { Typography, Avatar, Skeleton, Checkbox } from '@mui/material';
 import * as Styled from './styles';
 import { parseColor } from '../../utils/utils';
 
@@ -22,7 +22,7 @@ const Alternatives = ({
                 onClick={() => setExpanded(!expanded)}
                 sx={{
                   fontWeight: 'bold',
-                  marginTop: 3,
+                  marginTop: 2,
                   cursor: 'pointer',
                 }}
               >
@@ -58,6 +58,7 @@ const Alternatives = ({
                             <>
                               {searched ? (
                                 <>
+                                  <Typography sx={{ marginLeft: 1}}>{altValue?.priority}.</Typography>
                                   <Avatar
                                     alt={
                                       isHorde
@@ -69,7 +70,7 @@ const Alternatives = ({
                                         ? altValue?.hordeItem?.icon
                                         : altValue?.allianceItem?.icon
                                     }
-                                    sx={{ width: 24, height: 24 }}
+                                    sx={{ width: 24, height: 24, marginLeft: 1 }}
                                   />
                                 </>
                               ) : (
@@ -96,6 +97,9 @@ const Alternatives = ({
                                 : altValue?.allianceItem?.name}
                               ]
                             </Typography>
+                            <Checkbox
+                                inputProps={{ 'aria-label': 'controlled' }}
+                              />
                           </Styled.Tooltip>
                         );
                       }

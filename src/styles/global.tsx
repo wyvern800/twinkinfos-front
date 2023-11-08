@@ -47,7 +47,7 @@ export default createGlobalStyle`
   }
 }
 
-  body, html, #root {
+  body {
     background-color: transparent;
 
     margin: 0;
@@ -56,9 +56,7 @@ export default createGlobalStyle`
     display: flex;
     align-items: center;
     justify-content: center;
-  }
 
-  html {
     background-image: url('${bg}');
     background-attachment: fixed;
     background-size: cover;

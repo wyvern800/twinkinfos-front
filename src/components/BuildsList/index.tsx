@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import * as Styled from './styles';
 import {
   Switch,
@@ -9,6 +9,7 @@ import {
   Chip,
   Avatar,
   Skeleton,
+  Checkbox,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { equipment } from '../../utils/constants';
@@ -17,6 +18,9 @@ import Alternatives from '../Alternatives';
 import { parseColor } from '../../utils/utils';
 import alliance from '../../assets/alliance.png';
 import horde from '../../assets/horde.png';
+import RateBuild from '../RateBuild';
+import { formatDate } from '../../utils/utils';
+
 interface MaterialUISwitchProps extends SwitchProps {
   theme?: Theme;
   value: boolean;
@@ -101,12 +105,6 @@ export const BuildsList = ({
     setIsHorde(checked);
   };
 
-  useEffect(() => {
-    console.log(isHorde);
-    console.log(loaded);
-    console.log(searching);
-  }, [isHorde, loaded, searching]);
-
   /**
    * Constructs all skeletons for the build
    */
@@ -116,9 +114,15 @@ export const BuildsList = ({
     for (let i = 0; i < 14; i++) {
       components.push(
         <div key={i}>
-          <Typography sx={{ marginTop: '20px', width: '100%' }}>
-            <Skeleton />
-          </Typography>
+          <Divider textAlign="center">
+            <Chip
+              label={
+                <Skeleton>
+                  <Typography>Finger</Typography>
+                </Skeleton>
+              }
+            />
+          </Divider>
 
           <Skeleton sx={{ marginBottom: 1 }}>
             <Typography>Best in Slot:</Typography>
@@ -129,7 +133,7 @@ export const BuildsList = ({
               <Avatar sx={{ width: 24, height: 24 }} />
             </Skeleton>
             <Skeleton sx={{ marginLeft: 1 }}>
-              <Typography>Best in Slot:</Typography>
+              <Typography>Best in Slot: Axe</Typography>
             </Skeleton>
           </div>
 
@@ -146,7 +150,7 @@ export const BuildsList = ({
     <Styled.Wrapper>
       {loaded && !searching && (
         <>
-          <FormGroup sx={{ marginTop: 1 }}>
+          <FormGroup sx={{ marginTop: 2, marginBottom: 2 }}>
             <Stack direction="row" spacing={1} alignItems="center">
               <MaterialUISwitch
                 value={isHorde}
@@ -157,33 +161,46 @@ export const BuildsList = ({
         </>
       )}
       {!loaded && searching && (
-        <Skeleton sx={{ marginTop: 1 }}>
+        <Skeleton sx={{ marginTop: 2, marginBottom: 2 }}>
           <Switch />
         </Skeleton>
       )}
 
       {loaded && (
         <>
-          <Typography
-            sx={{ marginTop: 2 }}
-          >{`${buildsList[0]?.className}'s Twink Builds`}</Typography>
+          <Typography sx={{ marginTop: 2 }}>
+            <strong>Class:</strong> {buildsList[0]?.className}
+          </Typography>
         </>
       )}
       {!loaded && searching && (
         <Skeleton>
-          <Typography>Anyplayer's Twinks Builds</Typography>
+          <Typography sx={{ marginTop: 2 }}>Class: Hunter</Typography>
         </Skeleton>
       )}
 
       {loaded && (
         <Typography sx={{ marginBottom: 2 }}>
-          Race:{' '}
+          <strong>Race:</strong>{' '}
           {isHorde ? buildsList[0]?.hordeRace : buildsList[0]?.allianceRace}
         </Typography>
       )}
       {!loaded && searching && (
         <Skeleton>
-          <Typography>Race: Horde</Typography>
+          <Typography sx={{ marginBottom: 2 }}>Race: Horde</Typography>
+        </Skeleton>
+      )}
+
+      {loaded && (
+        <Typography sx={{ marginBottom: 2 }}>
+          <strong>Last Update:</strong> {formatDate(buildsList[0]?.updatedAt)}
+        </Typography>
+      )}
+      {!loaded && searching && (
+        <Skeleton>
+          <Typography sx={{ marginBottom: 2 }}>
+            Last Update: 2023-11-06
+          </Typography>
         </Skeleton>
       )}
 
@@ -204,58 +221,67 @@ export const BuildsList = ({
                               .toUpperCase()}
                           />
                         </Divider>
-                        {buildObjectKey && (buildObjectValue?.hordeItem || buildObjectValue?.allianceItem) && (
-                          <>
-                            <Typography sx={{ fontWeight: 'bold' }}>
-                              Best in Slot
-                            </Typography>
-                            {isHorde ? (
-                              <Styled.Tooltip
-                                href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.hordeItem?.itemId}`}
-                                data-wowhead={`item=${buildObjectValue?.hordeItem?.itemId}`}
-                                target="_blank"
-                              >
-                                <Avatar
-                                  alt={buildObjectValue?.hordeItem?.name}
-                                  src={buildObjectValue?.hordeItem?.icon}
-                                  sx={{ width: 24, height: 24 }}
-                                />
-                                <Typography
-                                  sx={{
-                                    color: parseColor(
-                                      buildObjectValue?.hordeItem?.itemLink,
-                                    ),
-                                    marginLeft: 1,
-                                  }}
+                        {buildObjectKey &&
+                          (buildObjectValue?.hordeItem ||
+                            buildObjectValue?.allianceItem) && (
+                            <>
+                              <Typography sx={{ fontWeight: 'bold' }}>
+                                Best in Slot
+                              </Typography>
+                              {isHorde ? (
+                                <Styled.Tooltip
+                                  href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.hordeItem?.itemId}`}
+                                  data-wowhead={`item=${buildObjectValue?.hordeItem?.itemId}`}
+                                  target="_blank"
                                 >
-                                  [{buildObjectValue?.hordeItem?.name}]
-                                </Typography>
-                              </Styled.Tooltip>
-                            ) : (
-                              <Styled.Tooltip
-                                href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.allianceItem?.itemId}`}
-                                data-wowhead={`item=${buildObjectValue?.allianceItem?.itemId}`}
-                                target="_blank"
-                              >
-                                <Avatar
-                                  alt={buildObjectValue?.allianceItem?.name}
-                                  src={buildObjectValue?.allianceItem?.icon}
-                                  sx={{ width: 24, height: 24 }}
-                                />
-                                <Typography
-                                  sx={{
-                                    color: parseColor(
-                                      buildObjectValue?.allianceItem?.itemLink,
-                                    ),
-                                    marginLeft: 1,
-                                  }}
+                                  <Avatar
+                                    alt={buildObjectValue?.hordeItem?.name}
+                                    src={buildObjectValue?.hordeItem?.icon}
+                                    sx={{ width: 24, height: 24 }}
+                                  />
+                                  <Typography
+                                    sx={{
+                                      color: parseColor(
+                                        buildObjectValue?.hordeItem?.itemLink,
+                                      ),
+                                      marginLeft: 1,
+                                    }}
+                                  >
+                                    [{buildObjectValue?.hordeItem?.name}]
+                                  </Typography>
+                                  <Checkbox
+                                    inputProps={{ 'aria-label': 'controlled' }}
+                                  />
+                                </Styled.Tooltip>
+                              ) : (
+                                <Styled.Tooltip
+                                  href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.allianceItem?.itemId}`}
+                                  data-wowhead={`item=${buildObjectValue?.allianceItem?.itemId}`}
+                                  target="_blank"
                                 >
-                                  [{buildObjectValue?.allianceItem?.name}]
-                                </Typography>
-                              </Styled.Tooltip>
-                            )}
-                          </>
-                        )}
+                                  <Avatar
+                                    alt={buildObjectValue?.allianceItem?.name}
+                                    src={buildObjectValue?.allianceItem?.icon}
+                                    sx={{ width: 24, height: 24 }}
+                                  />
+                                  <Typography
+                                    sx={{
+                                      color: parseColor(
+                                        buildObjectValue?.allianceItem
+                                          ?.itemLink,
+                                      ),
+                                      marginLeft: 1,
+                                    }}
+                                  >
+                                    [{buildObjectValue?.allianceItem?.name}]
+                                  </Typography>
+                                  <Checkbox
+                                    inputProps={{ 'aria-label': 'controlled' }}
+                                  />
+                                </Styled.Tooltip>
+                              )}
+                            </>
+                          )}
 
                         <Alternatives
                           buildObjectValue={buildObjectValue}
@@ -276,6 +302,8 @@ export const BuildsList = ({
         </Root>
       )}
       {!loaded && searching && <>{getSkeletons}</>}
+
+      {loaded && !searching && <RateBuild />}
     </Styled.Wrapper>
   );
 };

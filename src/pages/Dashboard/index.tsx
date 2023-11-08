@@ -4,6 +4,7 @@ import back from '../../services/back';
 import BuildsList from '../../components/BuildsList';
 import * as Styled from './styles';
 import Header from '../../components/Header';
+import Fade from '@mui/material/Fade';
 
 const Dashboard: React.FC = () => {
   const [builds, setBuilds] = useState([]);
@@ -25,16 +26,22 @@ const Dashboard: React.FC = () => {
   return (
     <Styled.OuterWrapper>
       <Header />
-      <Styled.Wrapper>
-        <Input
-          classes={classes}
-          setBuilds={setBuilds}
-          setLoaded={setLoaded}
-          setSearching={setSearching}
-          loaded={loaded}
-        />
-        <BuildsList buildsList={builds} searching={searching} loaded={loaded} />
-      </Styled.Wrapper>
+      <Fade in={true}>
+        <Styled.Wrapper>
+          <Input
+            classes={classes}
+            setBuilds={setBuilds}
+            setLoaded={setLoaded}
+            setSearching={setSearching}
+          />
+
+          <BuildsList
+            buildsList={builds}
+            searching={searching}
+            loaded={loaded}
+          />
+        </Styled.Wrapper>
+      </Fade>
     </Styled.OuterWrapper>
   );
 };

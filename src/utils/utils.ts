@@ -15,3 +15,21 @@ export const parseColor = (inputString: string) => {
   );
   return `#${extractedSubstring}`;
 };
+
+
+/**
+ * Formats a date
+ *
+ * @param date Formats the date
+ * @returns { string } The date formatted
+ */
+export const formatDate = (date: Date): string => {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+
+  const formattedDate = `${month}/${day}/${year}`;
+  return formattedDate;
+};

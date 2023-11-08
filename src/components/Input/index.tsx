@@ -1,4 +1,4 @@
-import React, { SetStateAction, Dispatch } from 'react';
+import React, { SetStateAction, Dispatch, useState } from 'react';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { toast } from 'react-toastify';
 import * as Styled from './styles';
@@ -9,7 +9,6 @@ type InputProps = {
   setBuilds: Dispatch<SetStateAction<any>>;
   setLoaded: Dispatch<SetStateAction<boolean>>;
   setSearching: Dispatch<SetStateAction<boolean>>;
-  loaded: any;
 };
 
 const Input = ({
@@ -17,21 +16,29 @@ const Input = ({
   setBuilds,
   setLoaded,
   setSearching,
-  loaded,
 }: InputProps): any => {
+  const [lastSelectedClass, setLastSelectedClass] = useState('');
+
   const handleOnSelect = async (className: any) => {
+    if (lastSelectedClass !== className.name) setLastSelectedClass('');
+    if (lastSelectedClass === className.name) return;
+
     setSearching(true);
     await back.getAllBuilds(className.name).then((res: any) => {
       // If no builds are returned, then say
       if (res.data.length === 0) {
-        toast.error('There are no builds for this class yet.');
+        //toast.error('There are no builds for this class yet.');
         setSearching(false);
         setLoaded(false);
         return;
       }
-      setBuilds(res.data);
-      setSearching(false);
-      setLoaded(true);
+
+      setTimeout(() => {
+        setBuilds(res.data);
+        setSearching(false);
+        setLoaded(true);
+        setLastSelectedClass(className.name);
+      }, 1000);
     });
   };
 
@@ -68,7 +75,7 @@ const Input = ({
               color: 'white',
               border: '0',
               hoverBackgroundColor: '#36384A',
-              zIndex: 100
+              zIndex: 100,
             }}
             showIcon={false}
             showNoResults
