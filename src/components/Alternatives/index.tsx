@@ -16,7 +16,12 @@ const Alternatives = ({
     <>
       {loaded && (
         <>
-          {buildObjectValue?.alternatives?.length ? (
+          {Object.values(buildObjectValue?.alternatives)?.filter(
+            (altValue: any) =>
+              isHorde
+                ? altValue?.type === 'hordeItem' && isHorde
+                : altValue?.type === 'allianceItem' && !isHorde,
+          )?.length ? (
             <>
               <Typography
                 onClick={() => setExpanded(!expanded)}
@@ -34,73 +39,85 @@ const Alternatives = ({
                   {Object.entries(buildObjectValue?.alternatives)
                     .filter(([altKey, altValue]: any) =>
                       isHorde
-                        ? altValue?.hordeItem && altValue?.hordeItem?.isHorde
-                        : altValue?.allianceItem &&
-                          !altValue?.allianceItem?.isHorde,
+                        ? altValue?.type === 'hordeItem' && isHorde
+                        : altValue?.type === 'allianceItem' && !isHorde,
                     )
                     .map(([altKey, altValue]: any, index) => {
                       if (altValue !== null && altKey !== undefined) {
                         return (
-                          <Styled.Tooltip
-                            key={index}
-                            href={`https://www.wowhead.com/wotlk/item=${
-                              isHorde
-                                ? altValue?.hordeItem?.itemId
-                                : altValue?.allianceItem?.itemId
-                            }`}
-                            data-wowhead={`item=${
-                              isHorde
-                                ? altValue?.hordeItem?.itemId
-                                : altValue?.allianceItem?.itemId
-                            }`}
-                            target="_blank"
-                          >
-                            <>
-                              {searched ? (
-                                <>
-                                  <Typography sx={{ marginLeft: 1}}>{altValue?.priority}.</Typography>
-                                  <Avatar
-                                    alt={
-                                      isHorde
-                                        ? altValue?.hordeItem?.name
-                                        : altValue?.allianceItem?.name
-                                    }
-                                    src={
-                                      isHorde
-                                        ? altValue?.hordeItem?.icon
-                                        : altValue?.allianceItem?.icon
-                                    }
-                                    sx={{ width: 24, height: 24, marginLeft: 1 }}
-                                  />
-                                </>
-                              ) : (
-                                <>
-                                  <Skeleton variant="circular">
-                                    <Avatar />
-                                  </Skeleton>
-                                </>
-                              )}
-                            </>
-                            <Typography
+                          <div key={index}>
+                            <Styled.Tooltip
+                              // key={index}
+                              href={`https://www.wowhead.com/wotlk/item=${altValue?.itemId}`}
+                              data-wowhead={`item=${altValue?.itemId}`}
+                              data-type="item"
+                              data-wh-icon-added="true"
+                              style={{
+                                backgroundImage:
+                                  'url(&quot;https://wow.zamimg.com/images/wow/icons/tiny/inv_jewelry_ring_10.gif&quot;)',
+                                width: '100%',
+                              }}
+                              target="_blank"
+                            >
+                              <>
+                                {searched ? (
+                                  <>
+                                    <Typography sx={{ marginLeft: 1 }}>
+                                      {altValue?.priority}.
+                                    </Typography>
+                                    <Avatar
+                                      alt={altValue?.name}
+                                      src={altValue?.icon}
+                                      sx={{
+                                        width: 24,
+                                        height: 24,
+                                        marginLeft: 1,
+                                      }}
+                                    />
+                                  </>
+                                ) : (
+                                  <>
+                                    <Skeleton variant="circular">
+                                      <Avatar />
+                                    </Skeleton>
+                                  </>
+                                )}
+                              </>
+                              <Typography
+                                sx={{
+                                  color: parseColor(
+                                    isHorde
+                                      ? altValue?.itemLink
+                                      : altValue?.itemLink,
+                                  ),
+                                  marginLeft: 1,
+                                }}
+                              >
+                                [{isHorde ? altValue?.name : altValue?.name}]
+                              </Typography>
+                              <Checkbox
+                                inputProps={{ 'aria-label': 'controlled' }}
+                                sx={{ display: 'none' }}
+                              />
+                            </Styled.Tooltip>
+
+                            { altValue?.notes && altValue?.notes !== '' && <Typography
                               sx={{
-                                color: parseColor(
-                                  isHorde
-                                    ? altValue?.hordeItem?.itemLink
-                                    : altValue?.allianceItem?.itemLink,
-                                ),
-                                marginLeft: 1,
+                                fontWeight: 'bold',
+                                fontSize: '0.7rem',
                               }}
                             >
-                              [
-                              {isHorde
-                                ? altValue?.hordeItem?.name
-                                : altValue?.allianceItem?.name}
-                              ]
-                            </Typography>
-                            <Checkbox
-                                inputProps={{ 'aria-label': 'controlled' }}
-                              />
-                          </Styled.Tooltip>
+                              Notes:{' '}
+                              <span
+                                style={{
+                                  fontWeight: 'normal',
+                                  fontSize: '0.8rem',
+                                }}
+                              >
+                                {altValue?.notes}
+                              </span>
+                            </Typography>}
+                          </div>
                         );
                       }
                       return [altKey, altValue];

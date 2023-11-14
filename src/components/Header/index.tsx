@@ -68,7 +68,7 @@ export default function HideAppBar(props?: Props) {
                 }}
                 sx={{ cursor: 'pointer' }}
               >
-                Twinkinfos
+                WoW Twinks
               </Typography>
             </Tooltip>
 

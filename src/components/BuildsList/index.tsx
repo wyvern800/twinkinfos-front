@@ -9,7 +9,7 @@ import {
   Chip,
   Avatar,
   Skeleton,
-  Checkbox,
+  Checkbox
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { equipment } from '../../utils/constants';
@@ -18,7 +18,7 @@ import Alternatives from '../Alternatives';
 import { parseColor } from '../../utils/utils';
 import alliance from '../../assets/alliance.png';
 import horde from '../../assets/horde.png';
-import RateBuild from '../RateBuild';
+// import RateBuild from '../RateBuild';
 import { formatDate } from '../../utils/utils';
 
 interface MaterialUISwitchProps extends SwitchProps {
@@ -160,6 +160,7 @@ export const BuildsList = ({
           </FormGroup>
         </>
       )}
+
       {!loaded && searching && (
         <Skeleton sx={{ marginTop: 2, marginBottom: 2 }}>
           <Switch />
@@ -206,11 +207,20 @@ export const BuildsList = ({
 
       {loaded && (
         <Root>
-          {buildsList.length ? (
+          {buildsList?.length ? (
             <>
               {Object.entries(buildsList[0]).map(
                 ([buildObjectKey, buildObjectValue]: any, indexBuild) => {
                   if (equipment.includes(buildObjectKey)) {
+                    const itemToShow = buildsList[0][
+                      buildObjectKey
+                    ]?.items?.find((i: any) =>
+                      isHorde
+                        ? i.type === 'hordeItem'
+                        : i.type === 'allianceItem',
+                    );
+                    console.log(itemToShow);
+
                     return (
                       <div key={indexBuild}>
                         <Divider textAlign="center">
@@ -221,67 +231,55 @@ export const BuildsList = ({
                               .toUpperCase()}
                           />
                         </Divider>
-                        {buildObjectKey &&
-                          (buildObjectValue?.hordeItem ||
-                            buildObjectValue?.allianceItem) && (
-                            <>
-                              <Typography sx={{ fontWeight: 'bold' }}>
-                                Best in Slot
+                        {buildObjectKey && itemToShow && (
+                          <>
+                            <Typography sx={{ fontWeight: 'bold' }}>
+                              Best in Slot
+                            </Typography>
+
+                            <Styled.Tooltip
+                              href={`https://www.wowhead.com/wotlk/item=${itemToShow?.itemId}`}
+                              data-wowhead={`item=${itemToShow?.itemId}`}
+                              target="_blank"
+                            >
+                              <Avatar
+                                alt={itemToShow?.name}
+                                src={itemToShow?.icon}
+                                sx={{ width: 24, height: 24 }}
+                              />
+                              <Typography
+                                sx={{
+                                  color: parseColor(itemToShow?.itemLink),
+                                  marginLeft: 1,
+                                }}
+                              >
+                                [{itemToShow?.name}]
                               </Typography>
-                              {isHorde ? (
-                                <Styled.Tooltip
-                                  href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.hordeItem?.itemId}`}
-                                  data-wowhead={`item=${buildObjectValue?.hordeItem?.itemId}`}
-                                  target="_blank"
+                              <Checkbox
+                                inputProps={{ 'aria-label': 'controlled' }}
+                                sx={{ display: 'none' }}
+                              />
+                            </Styled.Tooltip>
+                            {itemToShow?.notes && itemToShow?.notes !== '' && (
+                              <Typography
+                                sx={{
+                                  fontWeight: 'bold',
+                                  fontSize: '0.7rem',
+                                }}
+                              >
+                                Notes:{' '}
+                                <span
+                                  style={{
+                                    fontWeight: 'normal',
+                                    fontSize: '0.8rem',
+                                  }}
                                 >
-                                  <Avatar
-                                    alt={buildObjectValue?.hordeItem?.name}
-                                    src={buildObjectValue?.hordeItem?.icon}
-                                    sx={{ width: 24, height: 24 }}
-                                  />
-                                  <Typography
-                                    sx={{
-                                      color: parseColor(
-                                        buildObjectValue?.hordeItem?.itemLink,
-                                      ),
-                                      marginLeft: 1,
-                                    }}
-                                  >
-                                    [{buildObjectValue?.hordeItem?.name}]
-                                  </Typography>
-                                  <Checkbox
-                                    inputProps={{ 'aria-label': 'controlled' }}
-                                  />
-                                </Styled.Tooltip>
-                              ) : (
-                                <Styled.Tooltip
-                                  href={`https://www.wowhead.com/wotlk/item=${buildObjectValue?.allianceItem?.itemId}`}
-                                  data-wowhead={`item=${buildObjectValue?.allianceItem?.itemId}`}
-                                  target="_blank"
-                                >
-                                  <Avatar
-                                    alt={buildObjectValue?.allianceItem?.name}
-                                    src={buildObjectValue?.allianceItem?.icon}
-                                    sx={{ width: 24, height: 24 }}
-                                  />
-                                  <Typography
-                                    sx={{
-                                      color: parseColor(
-                                        buildObjectValue?.allianceItem
-                                          ?.itemLink,
-                                      ),
-                                      marginLeft: 1,
-                                    }}
-                                  >
-                                    [{buildObjectValue?.allianceItem?.name}]
-                                  </Typography>
-                                  <Checkbox
-                                    inputProps={{ 'aria-label': 'controlled' }}
-                                  />
-                                </Styled.Tooltip>
-                              )}
-                            </>
-                          )}
+                                  {itemToShow?.notes}
+                                </span>
+                              </Typography>
+                            )}
+                          </>
+                        )}
 
                         <Alternatives
                           buildObjectValue={buildObjectValue}
@@ -304,7 +302,7 @@ export const BuildsList = ({
       )}
       {!loaded && searching && <>{getSkeletons}</>}
 
-      {loaded && !searching && <RateBuild />}
+      {/*loaded && !searching && <RateBuild />*/}
     </Styled.Wrapper>
   );
 };

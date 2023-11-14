@@ -2,12 +2,14 @@ import React, { SetStateAction, Dispatch, useState } from 'react';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import * as Styled from './styles';
 import back from '../../services/back';
+import { toast } from 'react-toastify';
 
 type InputProps = {
   classes: any[];
   setBuilds: Dispatch<SetStateAction<any>>;
   setLoaded: Dispatch<SetStateAction<boolean>>;
   setSearching: Dispatch<SetStateAction<boolean>>;
+  buildsList: any[];
 };
 
 const Input = ({
@@ -15,29 +17,30 @@ const Input = ({
   setBuilds,
   setLoaded,
   setSearching,
+  buildsList
 }: InputProps): any => {
   const [lastSelectedClass, setLastSelectedClass] = useState('');
 
   const handleOnSelect = async (className: any) => {
+    if (buildsList[0]?.className === className.name) return;
     if (lastSelectedClass !== className.name) setLastSelectedClass('');
     if (lastSelectedClass === className.name) return;
 
-    setSearching(true);
     await back.getAllBuilds(className.name).then((res: any) => {
+      setSearching(true);
       // If no builds are returned, then say
-      if (res.data.length === 0) {
-        //toast.error('There are no builds for this class yet.');
+      if (res.data.length !== 0) {
+        setTimeout(() => {
+          setBuilds(res.data);
+          setSearching(false);
+          setLoaded(true);
+          setLastSelectedClass(className.name);
+        }, 1000);
+      } else {
+        toast.error('There are no builds for this class yet.');
         setSearching(false);
-        setLoaded(false);
-        return;
+        //setLoaded(false);
       }
-
-      setTimeout(() => {
-        setBuilds(res.data);
-        setSearching(false);
-        setLoaded(true);
-        setLastSelectedClass(className.name);
-      }, 1000);
     });
   };
 
